@@ -7,50 +7,66 @@ import { DragAndDropService } from "../drag-and-drop.service";
   styleUrls: ["./drag-and-drop.component.css"]
 })
 export class DragAndDropComponent implements OnInit {
-  @Input() showCurtain = false;
-  isMouseDown = false;
-  isDragging = false;
-  fromX: number;
-  fromY: number;
-  toX: number;
-  toY: number;
   @ViewChild("div") div: ElementRef;
 
-  constructor(private dragAndDropService: DragAndDropService) {}
+  constructor(public dragAndDropService: DragAndDropService) {}
 
   ngOnInit() {}
 
   onpointerdown(e: any) {
     if (e.button === 0 && e.buttons === 1) {
-      this.isMouseDown = true;
-      this.isDragging = false;
-      this.fromX = e.offsetX;
-      this.fromY = e.offsetY;
-      this.toX = undefined;
-      this.toY = undefined;
+      this.dragAndDropService.isMouseDown = true;
+      this.dragAndDropService.isDragging = false;
+      this.dragAndDropService.fromX = e.offsetX;
+      this.dragAndDropService.fromY = e.offsetY;
+      this.dragAndDropService.toX = undefined;
+      this.dragAndDropService.toY = undefined;
       this.div.nativeElement.setPointerCapture(e.pointerId);
-      console.log(`Dragged From:(${this.fromX},${this.fromY})`);
+      console.log(
+        `Dragged From:(${this.dragAndDropService.fromCard},${
+          this.dragAndDropService.fromX
+        },${this.dragAndDropService.fromY})`
+      );
     }
   }
 
   onpointermove(e: any) {
-    if (this.isMouseDown) {
-      this.isDragging = true;
+    if (this.dragAndDropService.isMouseDown) {
+      this.dragAndDropService.isDragging = true;
     }
   }
 
   onpointerup(e: any) {
-    if (this.isMouseDown) {
-      this.toX = e.offsetX;
-      this.toY = e.offsetY;
-      console.log(`Dropped To:(${this.toX},${this.toY})`);
-      this.isMouseDown = false;
-      this.isDragging = false;
-      this.fromX = undefined;
-      this.fromY = undefined;
-      this.toX = undefined;
-      this.toY = undefined;
+    if (this.dragAndDropService.isMouseDown) {
+      this.dragAndDropService.toX = e.offsetX;
+      this.dragAndDropService.toY = e.offsetY;
+      console.log(
+        `Dropped To:(${this.dragAndDropService.toCard},${
+          this.dragAndDropService.toX
+        },${this.dragAndDropService.toY})`
+      );
+      this.dragAndDropService.reset();
       this.div.nativeElement.releasePointerCapture(e.pointerId);
     }
+  }
+
+  allElementsFromPoint(x: number, y: number) {
+    let element: any;
+    let elements = [];
+    const old_visibility = [];
+    while (true) {
+      element = document.elementFromPoint(x, y);
+      if (!element || element === document.documentElement) {
+        break;
+      }
+      elements.push(element);
+      old_visibility.push(element.style.visibility);
+      element.style.visibility = "hidden"; // Temporarily hide the element (without changing the layout)
+    }
+    for (var k = 0; k < elements.length; k++) {
+      elements[k].style.visibility = old_visibility[k];
+    }
+    elements.reverse();
+    return elements;
   }
 }
