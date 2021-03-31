@@ -8,6 +8,7 @@ import { DragAndDropService } from "../drag-and-drop.service";
 })
 export class DragAndDropComponent implements OnInit {
   @ViewChild("div") div: ElementRef;
+  @Input() cardName: string;
 
   constructor(public dragAndDropService: DragAndDropService) {}
 
@@ -15,12 +16,11 @@ export class DragAndDropComponent implements OnInit {
 
   onpointerdown(e: any) {
     if (e.button === 0 && e.buttons === 1) {
+      this.dragAndDropService.reset();
       this.dragAndDropService.isMouseDown = true;
-      this.dragAndDropService.isDragging = false;
+      this.dragAndDropService.fromCard = this.cardName;
       this.dragAndDropService.fromX = e.offsetX;
       this.dragAndDropService.fromY = e.offsetY;
-      this.dragAndDropService.toX = undefined;
-      this.dragAndDropService.toY = undefined;
       this.div.nativeElement.setPointerCapture(e.pointerId);
       console.log(
         `Dragged From:(${this.dragAndDropService.fromCard},${
@@ -38,6 +38,7 @@ export class DragAndDropComponent implements OnInit {
 
   onpointerup(e: any) {
     if (this.dragAndDropService.isMouseDown) {
+      this.dragAndDropService.toCard = this.cardName;
       this.dragAndDropService.toX = e.offsetX;
       this.dragAndDropService.toY = e.offsetY;
       console.log(
