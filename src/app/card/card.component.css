@@ -1,0 +1,45 @@
+.square {
+  height: 30px;
+  width: 30px;
+  position: relative;
+  top: 100px;
+  left: 80px;
+}
+
+.red {
+  background: red;
+}
+
+.green {
+  background: green;
+}
+
+.blue {
+  background: blue;
+}
+
+.rectangle {
+  height: 30px;
+  width: 60px;
+  position: relative;
+  top: 50px;
+  left: 300px;
+}
+
+.outer {
+  display: grid;
+  grid-template: 1fr / 1fr;
+  border-style: solid;
+  height: calc(50vh - 5px);
+}
+.outer > * {
+  grid-column: 1 / 1;
+  grid-row: 1 / 1;
+}
+.outer .back {
+  z-index: 1;
+}
+.outer .front {
+  z-index: 2;
+}
+
