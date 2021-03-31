@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from "@angular/core";
+import { DragAndDropService } from "../drag-and-drop.service";
 
 @Component({
   selector: "app-drag-and-drop",
@@ -15,7 +16,7 @@ export class DragAndDropComponent implements OnInit {
   toY: number;
   @ViewChild("div") div: ElementRef;
 
-  constructor() {}
+  constructor(private dragAndDropService: DragAndDropService) {}
 
   ngOnInit() {}
 
