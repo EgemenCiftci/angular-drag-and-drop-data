@@ -22,11 +22,6 @@ export class DragAndDropComponent implements OnInit {
       this.dragAndDropService.fromX = e.offsetX;
       this.dragAndDropService.fromY = e.offsetY;
       this.div.nativeElement.setPointerCapture(e.pointerId);
-      console.log(
-        `Dragged From:(${this.dragAndDropService.fromCard},${
-          this.dragAndDropService.fromX
-        },${this.dragAndDropService.fromY})`
-      );
     }
   }
 
@@ -41,6 +36,11 @@ export class DragAndDropComponent implements OnInit {
       this.dragAndDropService.toCard = this.cardName;
       this.dragAndDropService.toX = e.offsetX;
       this.dragAndDropService.toY = e.offsetY;
+      console.log(
+        `Dragged From:(${this.dragAndDropService.fromCard},${
+          this.dragAndDropService.fromX
+        },${this.dragAndDropService.fromY})`
+      );
       console.log(
         `Dropped To:(${this.dragAndDropService.toCard},${
           this.dragAndDropService.toX
