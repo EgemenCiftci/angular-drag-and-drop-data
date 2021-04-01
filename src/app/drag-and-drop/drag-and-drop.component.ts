@@ -33,9 +33,11 @@ export class DragAndDropComponent implements OnInit {
 
   onpointerup(e: any) {
     if (this.dragAndDropService.isMouseDown) {
-      this.dragAndDropService.toCard = this.cardName;
-      this.dragAndDropService.toX = e.offsetX;
-      this.dragAndDropService.toY = e.offsetY;
+      console.log(e);
+      const toCard = this.getToCardElement(e);
+      this.dragAndDropService.toCard = toCard.attributes["name"].value;
+      this.dragAndDropService.toX = e.pageX;
+      this.dragAndDropService.toY = e.pageY;
       console.log(
         `Dragged From:(${this.dragAndDropService.fromCard},${
           this.dragAndDropService.fromX
@@ -51,23 +53,8 @@ export class DragAndDropComponent implements OnInit {
     }
   }
 
-  allElementsFromPoint(x: number, y: number) {
-    let element: any;
-    let elements = [];
-    const old_visibility = [];
-    while (true) {
-      element = document.elementFromPoint(x, y);
-      if (!element || element === document.documentElement) {
-        break;
-      }
-      elements.push(element);
-      old_visibility.push(element.style.visibility);
-      element.style.visibility = "hidden"; // Temporarily hide the element (without changing the layout)
-    }
-    for (var k = 0; k < elements.length; k++) {
-      elements[k].style.visibility = old_visibility[k];
-    }
-    elements.reverse();
-    return elements;
+  getToCardElement(e: any): any {
+    const elements = document.elementsFromPoint(e.clientX, e.clientY);
+    return elements.find(f => f.localName === "app-card");
   }
 }
