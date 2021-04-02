@@ -4,6 +4,7 @@ import { EventEmitter, Injectable, Output } from "@angular/core";
 export class DragAndDropService {
   isMouseDown = false;
   isDragging = false;
+  isInDragDropMode = false;
   
   fromCard: string;
   fromX: number;
@@ -20,6 +21,7 @@ export class DragAndDropService {
   reset() {
     this.isMouseDown = false;
     this.isDragging = false;
+    this.isInDragDropMode = false;
     this.fromCard = undefined;
     this.fromX = undefined;
     this.fromY = undefined;

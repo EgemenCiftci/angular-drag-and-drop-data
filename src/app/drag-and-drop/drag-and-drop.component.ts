@@ -46,8 +46,8 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
   onpointermove(e: any) {
     if (this.dragAndDropService.isMouseDown) {
       this.dragAndDropService.isDragging = true;
+      this.dragAndDropService.isInDragDropMode = true;
       this.clearCanvas();
-      console.log(e.offsetY);
       const position = this.getMousePos(e.clientX, e.clientY);
       if (this.showInfo) {
         this.drawInfo();
@@ -67,7 +67,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
           tos.element.attributes["ng-reflect-card-name"].value;
         this.dragAndDropService.toX = tos.x;
         this.dragAndDropService.toY = tos.y;
-        alert(
+        console.log(
           `From: ${this.dragAndDropService.fromCard} => (${
             this.dragAndDropService.fromX
           },${this.dragAndDropService.fromY})\nTo: ${
@@ -76,7 +76,8 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
         );
       }
     }
-
+    this.dragAndDropService.isMouseDown = false;
+    this.dragAndDropService.isDragging = false;
     this.canvas.nativeElement.releasePointerCapture(e.pointerId);
   }
 
