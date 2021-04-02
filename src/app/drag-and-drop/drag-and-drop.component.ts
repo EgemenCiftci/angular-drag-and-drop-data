@@ -39,12 +39,9 @@ export class DragAndDropComponent implements OnInit {
       this.dragAndDropService.toX = e.pageX;
       this.dragAndDropService.toY = e.pageY;
       console.log(
-        `Dragged From:(${this.dragAndDropService.fromCard},${
+        `From: ${this.dragAndDropService.fromCard}-(${
           this.dragAndDropService.fromX
-        },${this.dragAndDropService.fromY})`
-      );
-      console.log(
-        `Dropped To:(${this.dragAndDropService.toCard},${
+        },${this.dragAndDropService.fromY})\nTo: ${this.dragAndDropService.toCard}-(${
           this.dragAndDropService.toX
         },${this.dragAndDropService.toY})`
       );

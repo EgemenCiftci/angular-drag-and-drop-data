@@ -30,7 +30,8 @@
   display: grid;
   grid-template: 1fr / 1fr;
   border-style: solid;
-  height: calc(50vh - 5px);
+  height: 300px;
+  width: 300px;
 }
 .outer > * {
   grid-column: 1 / 1;
