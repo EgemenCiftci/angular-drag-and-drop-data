@@ -1,4 +1,3 @@
-import { NumberFormatStyle } from "@angular/common";
 import {
   Component,
   OnInit,
@@ -7,7 +6,6 @@ import {
   ElementRef,
   AfterViewInit
 } from "@angular/core";
-import { NumberValueAccessor } from "@angular/forms";
 import { DragAndDropService } from "../drag-and-drop.service";
 
 @Component({
@@ -19,7 +17,10 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
   @ViewChild("canvas") canvas: ElementRef;
   ctx: CanvasRenderingContext2D;
   @Input() cardName: string;
+  @Input() showInfo = true;
   @Input() showCrosshair = true;
+  background =
+    "linear-gradient(135deg, rgba(10,36,99,0.4) 0%, rgba(25,89,163,0.4) 100%)";
 
   constructor(public dragAndDropService: DragAndDropService) {}
 
@@ -43,9 +44,15 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
   onpointermove(e: any) {
     if (this.dragAndDropService.isMouseDown) {
       this.dragAndDropService.isDragging = true;
-      this.clearCrosshair();
+      this.clearCanvas();
       console.log(e.offsetY);
-      this.drawCrosshair(e.offsetX, e.offsetY);
+      const position = this.getMousePos(e.clientX, e.clientY);
+      if (this.showInfo) {
+        this.drawInfo();
+      }
+      if (this.showCrosshair) {
+        this.drawCrosshair(position.x, position.y);
+      }
     }
   }
 
@@ -54,7 +61,6 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
       const tos = this.getTos(e);
 
       if (tos) {
-        console.log(tos);
         this.dragAndDropService.toCard =
           tos.element.attributes["ng-reflect-card-name"].value;
         this.dragAndDropService.toX = tos.x;
@@ -70,6 +76,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
     }
 
     this.dragAndDropService.reset();
+    this.clearCanvas();
     this.canvas.nativeElement.releasePointerCapture(e.pointerId);
   }
 
@@ -87,10 +94,11 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
   }
 
   drawCrosshair(x: number, y: number) {
-    const simplifiedX = Math.floor(x);
-    const simplifiedY = Math.floor(y);
-
-    this.ctx.lineWidth = 1;
+    const lineWidth = 1;
+    const blurFix = lineWidth % 2 == 0 ? 0 : 0.5;
+    const simplifiedX = Math.floor(x) + blurFix;
+    const simplifiedY = Math.floor(y) + blurFix;
+    this.ctx.lineWidth = lineWidth;
     this.ctx.strokeStyle = "red";
     this.ctx.globalAlpha = 1;
     this.ctx.beginPath();
@@ -98,10 +106,71 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
     this.ctx.lineTo(this.ctx.canvas.width, simplifiedY);
     this.ctx.moveTo(simplifiedX, 0);
     this.ctx.lineTo(simplifiedX, this.ctx.canvas.height);
+    this.ctx.moveTo(simplifiedX, simplifiedY);
+    this.ctx.ellipse(simplifiedX, simplifiedY, 6, 3, 0, 0, 2 * Math.PI);
     this.ctx.stroke();
+    this.ctx.fillStyle = "white";
+    this.ctx.fill();
   }
 
-  clearCrosshair() {
+  drawInfo() {
+    const x = this.ctx.canvas.width - 110;
+    const y = 5;
+    this.ctx.fillStyle = "rgb(112, 87, 56)";
+    this.ctx.globalAlpha = 1;
+    this.roundedRect(x, y, 100, 100, 6, 3);
+    this.ctx.fill();
+  }
+
+  clearCanvas() {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+  }
+
+  getMousePos(clientX: number, clientY: number) {
+    const rect = this.ctx.canvas.getBoundingClientRect();
+    const scaleX = this.ctx.canvas.width / rect.width;
+    const scaleY = this.ctx.canvas.height / rect.height;
+    console.log(scaleY);
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  }
+
+  roundedRect(
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    rx: number,
+    ry: number
+  ) {
+    const r2d = Math.PI / 180;
+
+    if (w - 2 * rx < 0) {
+      rx = w * 0.5;
+    }
+    if (h - 2 * ry < 0) {
+      ry = h * 0.5;
+    }
+    this.ctx.beginPath();
+    this.ctx.moveTo(x + rx, y);
+    this.ctx.lineTo(x + w - rx, y);
+    this.ctx.ellipse(
+      x + w - rx,
+      y + ry,
+      rx,
+      ry,
+      0,
+      r2d * 270,
+      r2d * 360,
+      false
+    );
+    this.ctx.lineTo(x + w, y + h - ry);
+    this.ctx.ellipse(x + w - rx, y + h - ry, rx, ry, 0, 0, r2d * 90, false);
+    this.ctx.lineTo(x + rx, y + h);
+    this.ctx.ellipse(x + rx, y + h - ry, rx, ry, 0, r2d * 90, r2d * 180, false);
+    this.ctx.lineTo(x, y + ry);
+    this.ctx.ellipse(x + rx, y + ry, rx, ry, 0, r2d * 180, r2d * 270, false);
   }
 }

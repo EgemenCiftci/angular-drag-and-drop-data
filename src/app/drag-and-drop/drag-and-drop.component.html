@@ -1,6 +1,4 @@
-<canvas #canvas 
-  [style.opacity]="dragAndDropService.isDragging ? 0.6 : 0"
-  [style.cursor]="dragAndDropService.isDragging ? 'crosshair' : 'auto'" 
-  (pointerdown)="onpointerdown($event)"
-  (pointermove)="onpointermove($event)" 
-  (pointerup)="onpointerup($event)"></canvas>
+<canvas #canvas [style.background]="dragAndDropService.isDragging ? background : 'transparent'"
+  [style.cursor]="dragAndDropService.isDragging ? 'crosshair' : 'auto'" (pointerdown)="onpointerdown($event)"
+  (pointermove)="onpointermove($event)" (pointerup)="onpointerup($event)">
+</canvas>
