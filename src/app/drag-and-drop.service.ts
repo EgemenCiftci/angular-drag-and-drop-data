@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { EventEmitter, Injectable, Output } from "@angular/core";
 
 @Injectable()
 export class DragAndDropService {
@@ -13,6 +13,8 @@ export class DragAndDropService {
   toX: number;
   toY: number;
 
+  onReset = new EventEmitter<void>(); 
+
   constructor() {}
 
   reset() {
@@ -24,5 +26,6 @@ export class DragAndDropService {
     this.toCard = undefined;
     this.toX = undefined;
     this.toY = undefined;
+    this.onReset.emit();
   }
 }

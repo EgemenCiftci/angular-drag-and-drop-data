@@ -24,10 +24,12 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
 
   constructor(public dragAndDropService: DragAndDropService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngAfterViewInit() {
     this.ctx = this.canvas.nativeElement.getContext("2d");
+    this.dragAndDropService.onReset.subscribe(() => this.clearCanvas());
   }
 
   onpointerdown(e: any) {
@@ -75,8 +77,6 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
       }
     }
 
-    this.dragAndDropService.reset();
-    this.clearCanvas();
     this.canvas.nativeElement.releasePointerCapture(e.pointerId);
   }
 
@@ -116,10 +116,14 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
   drawInfo() {
     const x = this.ctx.canvas.width - 110;
     const y = 5;
+    const w = 100;
+    const h = 200;
     this.ctx.fillStyle = "rgb(112, 87, 56)";
     this.ctx.globalAlpha = 1;
-    this.roundedRect(x, y, 100, 100, 6, 3);
+    this.roundedRect(x, y, w, h / 2, 6, 3);
     this.ctx.fill();
+    this.ctx.fillStyle = "white";
+    this.ctx.fillText("Test", x + 10, (y + 10) / 2, 80);
   }
 
   clearCanvas() {
