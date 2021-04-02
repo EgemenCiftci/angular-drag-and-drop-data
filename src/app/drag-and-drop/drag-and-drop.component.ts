@@ -44,6 +44,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
     if (this.dragAndDropService.isMouseDown) {
       this.dragAndDropService.isDragging = true;
       this.clearCrosshair();
+      console.log(e.offsetY);
       this.drawCrosshair(e.offsetX, e.offsetY);
     }
   }
@@ -59,11 +60,11 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
         this.dragAndDropService.toX = tos.x;
         this.dragAndDropService.toY = tos.y;
         alert(
-          `From: ${this.dragAndDropService.fromCard}-(${
+          `From: ${this.dragAndDropService.fromCard} => (${
             this.dragAndDropService.fromX
           },${this.dragAndDropService.fromY})\nTo: ${
             this.dragAndDropService.toCard
-          }-(${this.dragAndDropService.toX},${this.dragAndDropService.toY})`
+          } => (${this.dragAndDropService.toX},${this.dragAndDropService.toY})`
         );
       }
     }
