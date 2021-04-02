@@ -1,4 +1,13 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from "@angular/core";
+import { NumberFormatStyle } from "@angular/common";
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  AfterViewInit
+} from "@angular/core";
+import { NumberValueAccessor } from "@angular/forms";
 import { DragAndDropService } from "../drag-and-drop.service";
 
 @Component({
@@ -6,13 +15,19 @@ import { DragAndDropService } from "../drag-and-drop.service";
   templateUrl: "./drag-and-drop.component.html",
   styleUrls: ["./drag-and-drop.component.css"]
 })
-export class DragAndDropComponent implements OnInit {
-  @ViewChild("cvns") canvas: ElementRef;
+export class DragAndDropComponent implements OnInit, AfterViewInit {
+  @ViewChild("canvas") canvas: ElementRef;
+  ctx: CanvasRenderingContext2D;
   @Input() cardName: string;
+  @Input() showCrosshair = true;
 
   constructor(public dragAndDropService: DragAndDropService) {}
 
   ngOnInit() {}
+
+  ngAfterViewInit() {
+    this.ctx = this.canvas.nativeElement.getContext("2d");
+  }
 
   onpointerdown(e: any) {
     if (e.button === 0 && e.buttons === 1) {
@@ -28,6 +43,8 @@ export class DragAndDropComponent implements OnInit {
   onpointermove(e: any) {
     if (this.dragAndDropService.isMouseDown) {
       this.dragAndDropService.isDragging = true;
+      this.clearCrosshair();
+      this.drawCrosshair(e.offsetX, e.offsetY);
     }
   }
 
@@ -66,5 +83,24 @@ export class DragAndDropComponent implements OnInit {
     }
 
     return undefined;
+  }
+
+  drawCrosshair(x: number, y: number) {
+    const simplifiedX = Math.floor(x);
+    const simplifiedY = Math.floor(y);
+
+    this.ctx.lineWidth = 1;
+    this.ctx.strokeStyle = "red";
+    this.ctx.globalAlpha = 1;
+    this.ctx.beginPath();
+    this.ctx.moveTo(0, simplifiedY);
+    this.ctx.lineTo(this.ctx.canvas.width, simplifiedY);
+    this.ctx.moveTo(simplifiedX, 0);
+    this.ctx.lineTo(simplifiedX, this.ctx.canvas.height);
+    this.ctx.stroke();
+  }
+
+  clearCrosshair() {
+    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
   }
 }
