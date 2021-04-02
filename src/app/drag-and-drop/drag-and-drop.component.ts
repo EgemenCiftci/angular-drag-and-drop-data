@@ -7,7 +7,7 @@ import { DragAndDropService } from "../drag-and-drop.service";
   styleUrls: ["./drag-and-drop.component.css"]
 })
 export class DragAndDropComponent implements OnInit {
-  @ViewChild("div") div: ElementRef;
+  @ViewChild("cvns") canvas: ElementRef;
   @Input() cardName: string;
 
   constructor(public dragAndDropService: DragAndDropService) {}
@@ -21,7 +21,7 @@ export class DragAndDropComponent implements OnInit {
       this.dragAndDropService.fromCard = this.cardName;
       this.dragAndDropService.fromX = e.offsetX;
       this.dragAndDropService.fromY = e.offsetY;
-      this.div.nativeElement.setPointerCapture(e.pointerId);
+      this.canvas.nativeElement.setPointerCapture(e.pointerId);
     }
   }
 
@@ -41,7 +41,7 @@ export class DragAndDropComponent implements OnInit {
           tos.element.attributes["ng-reflect-card-name"].value;
         this.dragAndDropService.toX = tos.x;
         this.dragAndDropService.toY = tos.y;
-        console.log(
+        alert(
           `From: ${this.dragAndDropService.fromCard}-(${
             this.dragAndDropService.fromX
           },${this.dragAndDropService.fromY})\nTo: ${
@@ -52,7 +52,7 @@ export class DragAndDropComponent implements OnInit {
     }
 
     this.dragAndDropService.reset();
-    this.div.nativeElement.releasePointerCapture(e.pointerId);
+    this.canvas.nativeElement.releasePointerCapture(e.pointerId);
   }
 
   getTos(e: any): { element: Element; x: number; y: number } {

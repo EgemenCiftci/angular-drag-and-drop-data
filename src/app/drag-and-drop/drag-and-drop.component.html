@@ -1,4 +1,6 @@
-<div #div [style.opacity]="dragAndDropService.isDragging ? 0.6 : 0" 
-      (pointerdown)="onpointerdown($event)"
-      (pointermove)="onpointermove($event)" 
-      (pointerup)="onpointerup($event)"></div>
+<canvas #cvns 
+  [style.opacity]="dragAndDropService.isDragging ? 0.6 : 0"
+  [style.cursor]="dragAndDropService.isDragging ? 'crosshair' : 'auto'" 
+  (pointerdown)="onpointerdown($event)"
+  (pointermove)="onpointermove($event)" 
+  (pointerup)="onpointerup($event)"></canvas>
