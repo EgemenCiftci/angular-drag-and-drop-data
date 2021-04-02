@@ -33,25 +33,38 @@ export class DragAndDropComponent implements OnInit {
 
   onpointerup(e: any) {
     if (this.dragAndDropService.isMouseDown) {
-      console.log(e);
-      const toCard = this.getToCardElement(e);
-      this.dragAndDropService.toCard = toCard.attributes["name"].value;
-      this.dragAndDropService.toX = e.pageX;
-      this.dragAndDropService.toY = e.pageY;
-      console.log(
-        `From: ${this.dragAndDropService.fromCard}-(${
-          this.dragAndDropService.fromX
-        },${this.dragAndDropService.fromY})\nTo: ${this.dragAndDropService.toCard}-(${
-          this.dragAndDropService.toX
-        },${this.dragAndDropService.toY})`
-      );
-      this.dragAndDropService.reset();
-      this.div.nativeElement.releasePointerCapture(e.pointerId);
+      const tos = this.getTos(e);
+
+      if (tos) {
+        console.log(tos);
+        this.dragAndDropService.toCard =
+          tos.element.attributes["ng-reflect-card-name"].value;
+        this.dragAndDropService.toX = tos.x;
+        this.dragAndDropService.toY = tos.y;
+        console.log(
+          `From: ${this.dragAndDropService.fromCard}-(${
+            this.dragAndDropService.fromX
+          },${this.dragAndDropService.fromY})\nTo: ${
+            this.dragAndDropService.toCard
+          }-(${this.dragAndDropService.toX},${this.dragAndDropService.toY})`
+        );
+      }
     }
+
+    this.dragAndDropService.reset();
+    this.div.nativeElement.releasePointerCapture(e.pointerId);
   }
 
-  getToCardElement(e: any): any {
+  getTos(e: any): { element: Element; x: number; y: number } {
     const elements = document.elementsFromPoint(e.clientX, e.clientY);
-    return elements.find(f => f.localName === "app-card");
+    const to = elements.find(f => f.localName === "app-drag-and-drop");
+    if (to) {
+      const rect = to.getBoundingClientRect();
+      const x = e.clientX - rect.x;
+      const y = e.clientY - rect.y;
+      return { element: to, x: x, y: y };
+    }
+
+    return undefined;
   }
 }
