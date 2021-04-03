@@ -21,6 +21,8 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
   @Input() cardName: string;
   @Input() showInfo = true;
   @Input() showCrosshair = true;
+  @Input() allowDrag = true;
+  @Input() allowDrop = true;
   background =
     "linear-gradient(135deg, rgba(10,36,99,0.4) 0%, rgba(25,89,163,0.4) 100%)";
 
@@ -49,9 +51,6 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
       this.dragAndDropService.isDragging = true;
       this.dragAndDropService.isInDragDropMode = true;
       this.clearCanvas();
-      if (this.showInfo) {
-        this.drawInfo();
-      }
       if (this.showCrosshair) {
         this.drawCrosshair(e.offsetX, e.offsetY);
       }
@@ -67,6 +66,9 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
           tos.element.attributes["ng-reflect-card-name"].value;
         this.dragAndDropService.toX = tos.x;
         this.dragAndDropService.toY = tos.y;
+        if (this.showInfo) {
+          this.drawInfo();
+        }
         console.log(
           `From: ${this.dragAndDropService.fromCard} => (${
             this.dragAndDropService.fromX
@@ -115,16 +117,59 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
   }
 
   drawInfo() {
-    const x = this.ctx.canvas.width - 110;
+    const w = 150;
+    const x = this.ctx.canvas.width - (w + 10);
     const y = 10;
-    const w = 100;
-    const h = 200;
+    const h = 110;
     this.ctx.fillStyle = "rgb(112, 87, 56)";
+    this.ctx.strokeStyle = "white";
     this.ctx.globalAlpha = 1;
     this.roundedRect(x, y, w, h, 6, 6);
     this.ctx.fill();
     this.ctx.fillStyle = "white";
-    this.ctx.fillText("Test", x + 10, y + 10, 80);
+
+    this.ctx.textAlign = "start";
+    this.ctx.textBaseline = "top";
+    this.ctx.fillText("FromCard:", x + 10, y + 10, 80);
+    this.ctx.fillText("FromX:", x + 10, y + 25, 80);
+    this.ctx.fillText("FromY:", x + 10, y + 40, 80);
+
+    this.ctx.moveTo(x + 10, y + 54.5);
+    this.ctx.lineTo(x + w - 10, y + 54.5);
+    this.ctx.stroke();
+
+    this.ctx.fillText("ToCard:", x + 10, y + 60, 80);
+    this.ctx.fillText("ToX:", x + 10, y + 75, 80);
+    this.ctx.fillText("ToY:", x + 10, y + 90, 80);
+
+    this.ctx.textAlign = "end";
+    this.ctx.fillText(this.dragAndDropService.fromCard, x + w - 10, y + 10, 80);
+    this.ctx.fillText(
+      Math.floor(this.dragAndDropService.fromX).toString(),
+      x + w - 10,
+      y + 25,
+      80
+    );
+    this.ctx.fillText(
+      Math.floor(this.dragAndDropService.fromY).toString(),
+      x + w - 10,
+      y + 40,
+      80
+    );
+
+    this.ctx.fillText(this.dragAndDropService.toCard, x + w - 10, y + 60, 80);
+    this.ctx.fillText(
+      Math.floor(this.dragAndDropService.toX).toString(),
+      x + w - 10,
+      y + 75,
+      80
+    );
+    this.ctx.fillText(
+      Math.floor(this.dragAndDropService.toY).toString(),
+      x + w - 10,
+      y + 90,
+      80
+    );
   }
 
   clearCanvas() {
