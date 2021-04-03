@@ -7,6 +7,5 @@ import { DragAndDropService } from "./drag-and-drop.service";
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent {
-  dragAndDrop = true;
   constructor(public dragAndDropService: DragAndDropService) {}
 }

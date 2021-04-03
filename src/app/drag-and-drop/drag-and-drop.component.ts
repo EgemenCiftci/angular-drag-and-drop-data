@@ -16,6 +16,8 @@ import { DragAndDropService } from "../drag-and-drop.service";
 export class DragAndDropComponent implements OnInit, AfterViewInit {
   @ViewChild("canvas") canvas: ElementRef;
   ctx: CanvasRenderingContext2D;
+  @Input() width: number;
+  @Input() height: number;
   @Input() cardName: string;
   @Input() showInfo = true;
   @Input() showCrosshair = true;
@@ -24,8 +26,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
 
   constructor(public dragAndDropService: DragAndDropService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     this.ctx = this.canvas.nativeElement.getContext("2d");
@@ -48,12 +49,11 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
       this.dragAndDropService.isDragging = true;
       this.dragAndDropService.isInDragDropMode = true;
       this.clearCanvas();
-      const position = this.getMousePos(e.clientX, e.clientY);
       if (this.showInfo) {
         this.drawInfo();
       }
       if (this.showCrosshair) {
-        this.drawCrosshair(position.x, position.y);
+        this.drawCrosshair(e.offsetX, e.offsetY);
       }
     }
   }
@@ -108,7 +108,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
     this.ctx.moveTo(simplifiedX, 0);
     this.ctx.lineTo(simplifiedX, this.ctx.canvas.height);
     this.ctx.moveTo(simplifiedX, simplifiedY);
-    this.ctx.ellipse(simplifiedX, simplifiedY, 6, 3, 0, 0, 2 * Math.PI);
+    this.ctx.ellipse(simplifiedX, simplifiedY, 6, 6, 0, 0, 2 * Math.PI);
     this.ctx.stroke();
     this.ctx.fillStyle = "white";
     this.ctx.fill();
@@ -116,30 +116,19 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
 
   drawInfo() {
     const x = this.ctx.canvas.width - 110;
-    const y = 5;
+    const y = 10;
     const w = 100;
     const h = 200;
     this.ctx.fillStyle = "rgb(112, 87, 56)";
     this.ctx.globalAlpha = 1;
-    this.roundedRect(x, y, w, h / 2, 6, 3);
+    this.roundedRect(x, y, w, h, 6, 6);
     this.ctx.fill();
     this.ctx.fillStyle = "white";
-    this.ctx.fillText("Test", x + 10, (y + 10) / 2, 80);
+    this.ctx.fillText("Test", x + 10, y + 10, 80);
   }
 
   clearCanvas() {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-  }
-
-  getMousePos(clientX: number, clientY: number) {
-    const rect = this.ctx.canvas.getBoundingClientRect();
-    const scaleX = this.ctx.canvas.width / rect.width;
-    const scaleY = this.ctx.canvas.height / rect.height;
-    console.log(scaleY);
-    return {
-      x: (clientX - rect.left) * scaleX,
-      y: (clientY - rect.top) * scaleY
-    };
   }
 
   roundedRect(
