@@ -36,7 +36,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
   }
 
   onpointerdown(e: any) {
-    if (e.button === 0 && e.buttons === 1) {
+    if (this.allowDrag && e.button === 0 && e.buttons === 1) {
       this.dragAndDropService.reset();
       this.dragAndDropService.isMouseDown = true;
       this.dragAndDropService.fromCard = this.cardName;
@@ -62,20 +62,28 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
       const tos = this.getTos(e);
 
       if (tos) {
-        this.dragAndDropService.toCard =
-          tos.element.attributes["ng-reflect-card-name"].value;
-        this.dragAndDropService.toX = tos.x;
-        this.dragAndDropService.toY = tos.y;
-        if (this.showInfo) {
-          this.drawInfo();
+        const toCard = tos.element.attributes["ng-reflect-card-name"].value;
+        if (toCard.allowDrop) {
+          this.dragAndDropService.toCard = toCard;
+          this.dragAndDropService.toX = tos.x;
+          this.dragAndDropService.toY = tos.y;
+          if (this.showInfo) {
+            this.drawInfo();
+          }
+          console.log(
+            `From: ${this.dragAndDropService.fromCard} => (${
+              this.dragAndDropService.fromX
+            },${this.dragAndDropService.fromY})\nTo: ${
+              this.dragAndDropService.toCard
+            } => (${this.dragAndDropService.toX},${
+              this.dragAndDropService.toY
+            })`
+          );
+        } else {
+          this.dragAndDropService.reset();
         }
-        console.log(
-          `From: ${this.dragAndDropService.fromCard} => (${
-            this.dragAndDropService.fromX
-          },${this.dragAndDropService.fromY})\nTo: ${
-            this.dragAndDropService.toCard
-          } => (${this.dragAndDropService.toX},${this.dragAndDropService.toY})`
-        );
+      } else {
+        this.dragAndDropService.reset();
       }
     }
     this.dragAndDropService.isMouseDown = false;
@@ -122,12 +130,13 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
     const y = 10;
     const h = 110;
     this.ctx.fillStyle = "rgb(112, 87, 56)";
-    this.ctx.strokeStyle = "white";
     this.ctx.globalAlpha = 1;
     this.roundedRect(x, y, w, h, 6, 6);
     this.ctx.fill();
-    this.ctx.fillStyle = "white";
 
+    this.ctx.beginPath();
+    this.ctx.fillStyle = "white";
+    this.ctx.strokeStyle = "white";
     this.ctx.textAlign = "start";
     this.ctx.textBaseline = "top";
     this.ctx.fillText("FromCard:", x + 10, y + 10, 80);
