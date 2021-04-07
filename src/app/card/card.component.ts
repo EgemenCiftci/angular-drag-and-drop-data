@@ -37,25 +37,21 @@ export class CardComponent implements OnInit {
   }
 
   onpointermove(e: any) {
-    if (this.isMouseDown) {
+    if (this.isMouseDown && !this.dragAndDropService.isInDragDropMode) {
       const deltaX = Math.abs(e.offsetX - this.fromX);
       const deltaY = Math.abs(e.offsetY - this.fromY);
-      if (deltaX > this.dragStartThreshold || deltaY > this.dragStartThreshold) {
+      if (
+        deltaX > this.dragStartThreshold ||
+        deltaY > this.dragStartThreshold
+      ) {
         // Drag & Drop Started
+        this.dragAndDropService.clearSelection();
         this.dragAndDropService.reset();
-        this.dragAndDropService.isDragging = true;
         this.dragAndDropService.isInDragDropMode = true;
         this.dragAndDropService.isMouseDown = true;
         this.dragAndDropService.fromCard = this.name;
         this.dragAndDropService.fromX = this.fromX;
         this.dragAndDropService.fromY = this.fromY;
-        this.dragAndDropComponent.canvas.nativeElement.setPointerCapture(
-          e.pointerId
-        );
-        this.dragAndDropComponent.clearCanvas();
-        if (this.showCrosshair) {
-          this.dragAndDropComponent.drawCrosshair(e.offsetX, e.offsetY);
-        }
       }
     }
   }
@@ -64,5 +60,13 @@ export class CardComponent implements OnInit {
     this.fromX = 0;
     this.fromY = 0;
     this.isMouseDown = false;
+  }
+
+  getIsHidden() {
+    if (!this.dragAndDropService.isInDragDropMode) {
+      return true;
+    } else {
+      return !this.allowDrop;
+    }
   }
 }

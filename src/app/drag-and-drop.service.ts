@@ -5,7 +5,7 @@ export class DragAndDropService {
   isMouseDown = false;
   isDragging = false;
   isInDragDropMode = false;
-  
+
   fromCard: string;
   fromX: number;
   fromY: number;
@@ -14,7 +14,7 @@ export class DragAndDropService {
   toX: number;
   toY: number;
 
-  onReset = new EventEmitter<void>(); 
+  onReset = new EventEmitter<void>();
 
   constructor() {}
 
@@ -29,5 +29,12 @@ export class DragAndDropService {
     this.toX = undefined;
     this.toY = undefined;
     this.onReset.emit();
+  }
+
+  clearSelection() {
+    const windowSelection = window.getSelection();
+    if (windowSelection) {
+      windowSelection.empty();
+    }
   }
 }

@@ -18,7 +18,7 @@
     <label>Drag Start Threshold </label>
     <input type="number" [(ngModel)]="dragStartThreshold" style="width: 40px"><br>
   </div>
-  <app-drag-and-drop [hidden]="!dragAndDropService.isInDragDropMode" class="inner" [cardName]="name" [width]="300"
-    [height]="300" [allowDrag]="allowDrag" [allowDrop]="allowDrop" [showCrosshair]="showCrosshair"
-    [showInfo]="showInfo"></app-drag-and-drop>
+  <app-drag-and-drop [hidden]="getIsHidden()" class="inner" [cardName]="name" [width]="300" [height]="300"
+    [allowDrag]="allowDrag" [allowDrop]="allowDrop" [showCrosshair]="showCrosshair" [showInfo]="showInfo">
+  </app-drag-and-drop>
 </div>

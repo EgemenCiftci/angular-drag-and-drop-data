@@ -55,10 +55,21 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
       this.dragAndDropService.isMouseDown &&
       this.dragAndDropService.isInDragDropMode
     ) {
-      this.dragAndDropService.isDragging = true;
+      if (!this.dragAndDropService.isDragging) {
+        this.dragAndDropService.isDragging = true;
+        this.canvas.nativeElement.setPointerCapture(e.pointerId);
+      }
+
       this.clearCanvas();
       if (this.showCrosshair) {
-        this.drawCrosshair(e.offsetX, e.offsetY);
+        const isCrosshairInBounds =
+          e.offsetX >= 0 &&
+          e.offsetY >= 0 &&
+          e.offsetX < this.width &&
+          e.offsetY < this.height;
+        if (isCrosshairInBounds) {
+          this.drawCrosshair(e.offsetX, e.offsetY);
+        }
       }
     }
   }
@@ -98,6 +109,22 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
     this.dragAndDropService.isMouseDown = false;
     this.dragAndDropService.isDragging = false;
     this.canvas.nativeElement.releasePointerCapture(e.pointerId);
+  }
+
+  onpointerenter(e: any) {
+    console.log("Enter");
+  }
+
+  onpointerleave(e: any) {
+    console.log("Leave");
+  }
+
+  onpointerover(e: any) {
+    console.log("Over");
+  }
+
+  onpointerout(e: any) {
+    console.log("Out");
   }
 
   getTos(e: any): { element: Element; x: number; y: number } {

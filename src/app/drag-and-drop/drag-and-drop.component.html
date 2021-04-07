@@ -1,5 +1,6 @@
 <canvas #canvas [width]="width" [height]="height"
   [style.background]="dragAndDropService.isInDragDropMode ? background : 'transparent'"
   [style.cursor]="dragAndDropService.isInDragDropMode ? 'crosshair' : 'auto'" (pointerdown)="onpointerdown($event)"
-  (pointermove)="onpointermove($event)" (pointerup)="onpointerup($event)">
+  (pointermove)="onpointermove($event)" (pointerup)="onpointerup($event)" (pointerenter)="onpointerenter($event)"
+  (pointerleave)="onpointerleave($event)" (pointerover)="onpointerover($event)" (pointerout)="onpointerout($event)">
 </canvas>
