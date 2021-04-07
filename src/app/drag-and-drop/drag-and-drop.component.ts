@@ -58,6 +58,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
       if (!this.dragAndDropService.isDragging) {
         this.dragAndDropService.isDragging = true;
         this.canvas.nativeElement.setPointerCapture(e.pointerId);
+        console.log("setPointerCapture: " + this.cardName);
       }
 
       this.clearCanvas();
@@ -69,6 +70,14 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
           e.offsetY < this.height;
         if (isCrosshairInBounds) {
           this.drawCrosshair(e.offsetX, e.offsetY);
+        } else {
+          const tos = this.getTos(e);
+          if (tos) {
+            this.clearCanvas();
+            this.canvas.nativeElement.releasePointerCapture(e.pointerId);
+            console.log("releasePointerCapture: " + this.cardName);
+            this.dragAndDropService.isDragging = false;
+          }
         }
       }
     }
@@ -80,13 +89,12 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
       this.dragAndDropService.isInDragDropMode
     ) {
       const tos = this.getTos(e);
-
       if (tos) {
         const toCard = tos.element.attributes["ng-reflect-card-name"].value;
         if (this.allowDrop) {
-          this.dragAndDropService.toCard = toCard;
-          this.dragAndDropService.toX = tos.x;
-          this.dragAndDropService.toY = tos.y;
+          this.dragAndDropService.toCard = this.cardName;
+          this.dragAndDropService.toX = e.offsetX;
+          this.dragAndDropService.toY = e.offsetY;
           if (this.showInfo) {
             this.drawInfo();
           }
