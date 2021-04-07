@@ -1,17 +1,24 @@
-<div class="outer" 
-    (pointerdown)="onpointerdown($event)"
-    (pointermove)="onpointermove($event)">
+<div class="outer" (pointerdown)="onpointerdown($event)" (pointermove)="onpointermove($event)"
+  (pointerup)="onpointerup($event)">
   <div class="inner">
     <span>{{name}}</span><br>
+
     <input type="checkbox" [(ngModel)]="allowDrag">
     <label>Allow Drag</label><br>
+
     <input type="checkbox" [(ngModel)]="allowDrop">
     <label>Allow Drop</label><br>
+
     <input type="checkbox" [(ngModel)]="showCrosshair">
     <label>Show Crosshair</label><br>
+
     <input type="checkbox" [(ngModel)]="showInfo">
     <label>Show Info</label><br>
+
+    <label>Drag Start Threshold </label>
+    <input type="number" [(ngModel)]="dragStartThreshold" style="width: 40px"><br>
   </div>
-  <app-drag-and-drop *ngIf="dragAndDropService.isInDragDropMode" class="inner" [cardName]="name" [width]="300" [height]="300" [allowDrag]="allowDrag"
-    [allowDrop]="allowDrop" [showCrosshair]="showCrosshair" [showInfo]="showInfo"></app-drag-and-drop>
+  <app-drag-and-drop [hidden]="!dragAndDropService.isInDragDropMode" class="inner" [cardName]="name" [width]="300"
+    [height]="300" [allowDrag]="allowDrag" [allowDrop]="allowDrop" [showCrosshair]="showCrosshair"
+    [showInfo]="showInfo"></app-drag-and-drop>
 </div>

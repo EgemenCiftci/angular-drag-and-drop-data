@@ -36,9 +36,10 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
   }
 
   onpointerdown(e: any) {
-    if (this.allowDrag && e.button === 0 && e.buttons === 1) {
-      this.dragAndDropService.reset();
+    // Reposition Drop Target
+    if (this.dragAndDropService.isInDragDropMode) {
       this.dragAndDropService.isMouseDown = true;
+      this.dragAndDropService.reset();
       this.dragAndDropService.fromCard = this.cardName;
       this.dragAndDropService.fromX = e.offsetX;
       this.dragAndDropService.fromY = e.offsetY;
@@ -47,9 +48,11 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
   }
 
   onpointermove(e: any) {
-    if (this.dragAndDropService.isMouseDown) {
+    if (
+      this.dragAndDropService.isMouseDown &&
+      this.dragAndDropService.isInDragDropMode
+    ) {
       this.dragAndDropService.isDragging = true;
-      this.dragAndDropService.isInDragDropMode = true;
       this.clearCanvas();
       if (this.showCrosshair) {
         this.drawCrosshair(e.offsetX, e.offsetY);
@@ -58,7 +61,10 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
   }
 
   onpointerup(e: any) {
-    if (this.dragAndDropService.isMouseDown) {
+    if (
+      this.dragAndDropService.isMouseDown &&
+      this.dragAndDropService.isInDragDropMode
+    ) {
       const tos = this.getTos(e);
 
       if (tos) {
