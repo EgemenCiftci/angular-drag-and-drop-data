@@ -39,10 +39,13 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
     // Reposition Drop Target
     if (this.dragAndDropService.isInDragDropMode) {
       this.dragAndDropService.isMouseDown = true;
-      this.dragAndDropService.reset();
       this.dragAndDropService.fromCard = this.cardName;
-      this.dragAndDropService.fromX = e.offsetX;
-      this.dragAndDropService.fromY = e.offsetY;
+      this.dragAndDropService.toX = e.offsetX;
+      this.dragAndDropService.toY = e.offsetY;
+      this.clearCanvas();
+      if (this.showCrosshair) {
+        this.drawCrosshair(e.offsetX, e.offsetY);
+      }
       this.canvas.nativeElement.setPointerCapture(e.pointerId);
     }
   }
@@ -69,7 +72,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
 
       if (tos) {
         const toCard = tos.element.attributes["ng-reflect-card-name"].value;
-        if (toCard.allowDrop) {
+        if (this.allowDrop) {
           this.dragAndDropService.toCard = toCard;
           this.dragAndDropService.toX = tos.x;
           this.dragAndDropService.toY = tos.y;
