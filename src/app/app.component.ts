@@ -1,4 +1,4 @@
-import { Component, VERSION } from "@angular/core";
+import { Component } from "@angular/core";
 import { DragAndDropService } from "./drag-and-drop.service";
 
 @Component({
