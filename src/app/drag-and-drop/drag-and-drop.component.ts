@@ -25,6 +25,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
   @Input() allowDrop = true;
   background =
     "linear-gradient(135deg, rgba(10,36,99,0.4) 0%, rgba(25,89,163,0.4) 100%)";
+  cursor = "auto";
 
   constructor(public dragAndDropService: DragAndDropService) {}
 
@@ -70,13 +71,17 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
           e.offsetY < this.height;
         if (isCrosshairInBounds) {
           this.drawCrosshair(e.offsetX, e.offsetY);
+          this.cursor = "crosshair";
         } else {
           const tos = this.getTos(e);
           if (tos) {
             this.clearCanvas();
+            this.cursor = "auto";
             this.canvas.nativeElement.releasePointerCapture(e.pointerId);
             console.log("releasePointerCapture: " + this.cardName);
             this.dragAndDropService.isDragging = false;
+          } else {
+            this.cursor = "no-drop";
           }
         }
       }
@@ -116,7 +121,9 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
     }
     this.dragAndDropService.isMouseDown = false;
     this.dragAndDropService.isDragging = false;
+    this.dragAndDropService.isInFineAdjustMode = true;
     this.canvas.nativeElement.releasePointerCapture(e.pointerId);
+    this.cursor = "auto";
   }
 
   onpointerenter(e: any) {

@@ -5,6 +5,7 @@ export class DragAndDropService {
   isMouseDown = false;
   isDragging = false;
   isInDragDropMode = false;
+  isInFineAdjustMode = false;
 
   fromCard: string;
   fromX: number;
@@ -22,6 +23,7 @@ export class DragAndDropService {
     this.isMouseDown = false;
     this.isDragging = false;
     this.isInDragDropMode = false;
+    this.isInFineAdjustMode = false;
     this.fromCard = undefined;
     this.fromX = undefined;
     this.fromY = undefined;

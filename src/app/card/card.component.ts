@@ -44,6 +44,7 @@ export class CardComponent implements OnInit {
         deltaX > this.dragStartThreshold ||
         deltaY > this.dragStartThreshold
       ) {
+        this.isMouseDown = false;
         // Drag & Drop Started
         this.dragAndDropService.clearSelection();
         this.dragAndDropService.reset();
@@ -60,13 +61,18 @@ export class CardComponent implements OnInit {
     this.fromX = 0;
     this.fromY = 0;
     this.isMouseDown = false;
+    alert("sd");
+  }
+
+  reset() {
+
   }
 
   getIsHidden() {
     if (!this.dragAndDropService.isInDragDropMode) {
       return true;
     } else {
-      return !this.allowDrop;
+      return !this.allowDrop || (this.dragAndDropService.isInFineAdjustMode && this.dragAndDropService.toCard !== this.name);
     }
   }
 }
