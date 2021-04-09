@@ -59,7 +59,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
       if (!this.dragAndDropService.isDragging) {
         this.dragAndDropService.isDragging = true;
         this.canvas.nativeElement.setPointerCapture(e.pointerId);
-        console.log("setPointerCapture: " + this.cardName);
+        //console.log("setPointerCapture: " + this.cardName);
       }
 
       this.clearCanvas();
@@ -78,7 +78,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
             this.clearCanvas();
             this.cursor = "auto";
             this.canvas.nativeElement.releasePointerCapture(e.pointerId);
-            console.log("releasePointerCapture: " + this.cardName);
+            //console.log("releasePointerCapture: " + this.cardName);
             this.dragAndDropService.isDragging = false;
           } else {
             this.cursor = "no-drop";

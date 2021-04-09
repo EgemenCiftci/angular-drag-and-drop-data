@@ -61,18 +61,17 @@ export class CardComponent implements OnInit {
     this.fromX = 0;
     this.fromY = 0;
     this.isMouseDown = false;
-    alert("sd");
-  }
-
-  reset() {
-
   }
 
   getIsHidden() {
     if (!this.dragAndDropService.isInDragDropMode) {
       return true;
     } else {
-      return !this.allowDrop || (this.dragAndDropService.isInFineAdjustMode && this.dragAndDropService.toCard !== this.name);
+      return (
+        !this.allowDrop ||
+        (this.dragAndDropService.isInFineAdjustMode &&
+          this.dragAndDropService.toCard !== this.name)
+      );
     }
   }
 }
