@@ -103,7 +103,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
           if (this.showInfo) {
             this.drawInfo();
           }
-          console.log(
+          /*console.log(
             `From: ${this.dragAndDropService.fromCard} => (${
               this.dragAndDropService.fromX
             },${this.dragAndDropService.fromY})\nTo: ${
@@ -111,7 +111,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
             } => (${this.dragAndDropService.toX},${
               this.dragAndDropService.toY
             })`
-          );
+          );*/
         } else {
           this.dragAndDropService.reset();
         }
