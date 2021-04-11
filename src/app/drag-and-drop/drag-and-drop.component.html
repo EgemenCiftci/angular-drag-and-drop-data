@@ -1,4 +1,11 @@
-<canvas #canvas [width]="width" [height]="height"
-  [style.background]="dragAndDropService.isInDragDropMode ? background : 'transparent'" [style.cursor]="cursor"
-  (pointerdown)="onpointerdown($event)" (pointermove)="onpointermove($event)" (pointerup)="onpointerup($event)">
+<canvas
+  #canvas
+  [width]="width"
+  [height]="height"
+  [style.background]="background"
+  [style.cursor]="cursor"
+  (pointerdown)="onpointerdown($event)"
+  (pointermove)="onpointermove($event)"
+  (pointerup)="onpointerup($event)"
+>
 </canvas>

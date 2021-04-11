@@ -57,32 +57,39 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
       if (!this.dragAndDropService.isDragging) {
         this.dragAndDropService.isDragging = true;
         this.canvas.nativeElement.setPointerCapture(e.pointerId);
-        //console.log("setPointerCapture: " + this.cardName);
       }
 
+      const isPointerInBounds =
+        e.offsetX >= 0 &&
+        e.offsetY >= 0 &&
+        e.offsetX < this.width &&
+        e.offsetY < this.height;
       this.clearCanvas();
-      if (this.options.showCrosshair) {
-        const isCrosshairInBounds =
-          e.offsetX >= 0 &&
-          e.offsetY >= 0 &&
-          e.offsetX < this.width &&
-          e.offsetY < this.height;
-        if (isCrosshairInBounds) {
+      if (isPointerInBounds) {
+        if (this.options.showCrosshair) {
           this.drawCrosshair(e.offsetX, e.offsetY);
-          this.cursor = "crosshair";
+        }
+      } else {
+        const tos = this.getTos(e);
+        const isPointerOverAnotherComponent = tos !== undefined;
+        if (isPointerOverAnotherComponent) {
+          // Other drag and drop component found under pointer
+          // Reset this component and release pointer
+          this.cursor = "auto";
+          this.canvas.nativeElement.releasePointerCapture(e.pointerId);
+          //console.log("releasePointerCapture: " + this.cardName);
+          this.dragAndDropService.isDragging = false;
         } else {
-          const tos = this.getTos(e);
-          if (tos) {
-            this.clearCanvas();
-            this.cursor = "auto";
-            this.canvas.nativeElement.releasePointerCapture(e.pointerId);
-            //console.log("releasePointerCapture: " + this.cardName);
-            this.dragAndDropService.isDragging = false;
-          } else {
-            this.cursor = "no-drop";
-          }
+          this.cursor = "no-drop";
         }
       }
+      this.setCursor(isPointerInBounds);
+    }
+  }
+
+  setCursor(isPointerInBounds: boolean) {
+    if (isPointerInBounds) {
+      this.cursor = this.options.allowDrop ? "crosshair" : "no-drop";
     }
   }
 
@@ -122,22 +129,6 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
     this.dragAndDropService.isInFineAdjustMode = true;
     this.canvas.nativeElement.releasePointerCapture(e.pointerId);
     this.cursor = "auto";
-  }
-
-  onpointerenter(e: any) {
-    console.log("Enter");
-  }
-
-  onpointerleave(e: any) {
-    console.log("Leave");
-  }
-
-  onpointerover(e: any) {
-    console.log("Over");
-  }
-
-  onpointerout(e: any) {
-    console.log("Out");
   }
 
   getTos(e: any): { element: Element; x: number; y: number } {

@@ -65,9 +65,8 @@ export class CardComponent implements OnInit {
       return true;
     } else {
       return (
-        !this.dragAndDropOptions.allowDrop ||
-        (this.dragAndDropService.isInFineAdjustMode &&
-          this.dragAndDropService.toCard !== this.name)
+        this.dragAndDropService.isInFineAdjustMode &&
+        this.dragAndDropService.toCard !== this.name
       );
     }
   }
