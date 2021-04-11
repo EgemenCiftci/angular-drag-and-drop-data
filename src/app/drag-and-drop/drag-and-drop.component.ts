@@ -6,6 +6,7 @@ import {
   ElementRef,
   AfterViewInit
 } from "@angular/core";
+import { DragAndDropOptions } from "../drag-and-drop-options";
 import { DragAndDropService } from "../drag-and-drop.service";
 
 @Component({
@@ -19,10 +20,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
   @Input() width: number;
   @Input() height: number;
   @Input() cardName: string;
-  @Input() showInfo = true;
-  @Input() showCrosshair = true;
-  @Input() allowDrag = true;
-  @Input() allowDrop = true;
+  @Input() options: DragAndDropOptions;
   background =
     "linear-gradient(135deg, rgba(10,36,99,0.4) 0%, rgba(25,89,163,0.4) 100%)";
   cursor = "auto";
@@ -44,7 +42,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
       this.dragAndDropService.toX = e.offsetX;
       this.dragAndDropService.toY = e.offsetY;
       this.clearCanvas();
-      if (this.showCrosshair) {
+      if (this.options.showCrosshair) {
         this.drawCrosshair(e.offsetX, e.offsetY);
       }
       this.canvas.nativeElement.setPointerCapture(e.pointerId);
@@ -63,7 +61,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
       }
 
       this.clearCanvas();
-      if (this.showCrosshair) {
+      if (this.options.showCrosshair) {
         const isCrosshairInBounds =
           e.offsetX >= 0 &&
           e.offsetY >= 0 &&
@@ -96,11 +94,11 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
       const tos = this.getTos(e);
       if (tos) {
         const toCard = tos.element.attributes["ng-reflect-card-name"].value;
-        if (this.allowDrop) {
+        if (this.options.allowDrop) {
           this.dragAndDropService.toCard = this.cardName;
           this.dragAndDropService.toX = e.offsetX;
           this.dragAndDropService.toY = e.offsetY;
-          if (this.showInfo) {
+          if (this.options.showInfo) {
             this.drawInfo();
           }
           /*console.log(

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from "@angular/core";
+import { DragAndDropOptions } from "../drag-and-drop-options";
 import { DragAndDropService } from "../drag-and-drop.service";
 import { DragAndDropComponent } from "../drag-and-drop/drag-and-drop.component";
 
@@ -10,11 +11,7 @@ import { DragAndDropComponent } from "../drag-and-drop/drag-and-drop.component";
 export class CardComponent implements OnInit {
   @ViewChild(DragAndDropComponent) dragAndDropComponent: DragAndDropComponent;
   @Input() name: string;
-  @Input() showInfo = true;
-  @Input() showCrosshair = true;
-  @Input() allowDrag = true;
-  @Input() allowDrop = true;
-  @Input() dragStartThreshold = 32;
+  dragAndDropOptions: DragAndDropOptions = new DragAndDropOptions();
   fromX = 0;
   fromY = 0;
   isMouseDown = false;
@@ -26,7 +23,7 @@ export class CardComponent implements OnInit {
   onpointerdown(e: any) {
     if (
       !this.dragAndDropService.isInDragDropMode &&
-      this.allowDrag &&
+      this.dragAndDropOptions.allowDrag &&
       e.button === 0 &&
       e.buttons === 1
     ) {
@@ -41,8 +38,8 @@ export class CardComponent implements OnInit {
       const deltaX = Math.abs(e.offsetX - this.fromX);
       const deltaY = Math.abs(e.offsetY - this.fromY);
       if (
-        deltaX > this.dragStartThreshold ||
-        deltaY > this.dragStartThreshold
+        deltaX > this.dragAndDropOptions.dragStartThreshold ||
+        deltaY > this.dragAndDropOptions.dragStartThreshold
       ) {
         this.isMouseDown = false;
         // Drag & Drop Started
@@ -68,7 +65,7 @@ export class CardComponent implements OnInit {
       return true;
     } else {
       return (
-        !this.allowDrop ||
+        !this.dragAndDropOptions.allowDrop ||
         (this.dragAndDropService.isInFineAdjustMode &&
           this.dragAndDropService.toCard !== this.name)
       );
