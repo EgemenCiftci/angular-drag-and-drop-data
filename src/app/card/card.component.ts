@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from "@angular/core";
 import { DragAndDropOptions } from "../drag-and-drop-options";
 import { DragAndDropService } from "../drag-and-drop.service";
 import { DragAndDropComponent } from "../drag-and-drop/drag-and-drop.component";
@@ -8,8 +8,9 @@ import { DragAndDropComponent } from "../drag-and-drop/drag-and-drop.component";
   templateUrl: "./card.component.html",
   styleUrls: ["./card.component.css"]
 })
-export class CardComponent implements OnInit {
+export class CardComponent implements OnInit, AfterViewInit {
   @ViewChild(DragAndDropComponent) dragAndDropComponent: DragAndDropComponent;
+  @ViewChild("innerDiv") innerDiv: ElementRef;
   @Input() name: string;
   dragAndDropOptions: DragAndDropOptions = new DragAndDropOptions();
   fromX = 0;
@@ -19,6 +20,13 @@ export class CardComponent implements OnInit {
   constructor(public dragAndDropService: DragAndDropService) {}
 
   ngOnInit() {}
+
+  ngAfterViewInit() {
+    const rect = this.innerDiv.nativeElement.getBoundingClientRect();
+    console.log(rect);
+    this.dragAndDropComponent.width = rect.width;
+    this.dragAndDropComponent.height = rect.height;
+  }
 
   onpointerdown(e: any) {
     if (
