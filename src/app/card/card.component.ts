@@ -23,7 +23,6 @@ export class CardComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     const rect = this.innerDiv.nativeElement.getBoundingClientRect();
-    console.log(rect);
     this.dragAndDropComponent.width = rect.width;
     this.dragAndDropComponent.height = rect.height;
   }
