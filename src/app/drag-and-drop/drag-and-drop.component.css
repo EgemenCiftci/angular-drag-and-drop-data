@@ -1,1 +1,7 @@
-
+canvas {
+  background: linear-gradient(
+    135deg,
+    rgba(10, 36, 99, 0.4) 0%,
+    rgba(25, 89, 163, 0.4) 100%
+  );
+}

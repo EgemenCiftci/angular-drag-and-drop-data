@@ -21,8 +21,6 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
   @Input() height: number;
   @Input() cardName: string;
   @Input() options: DragAndDropOptions;
-  background =
-    "linear-gradient(135deg, rgba(10,36,99,0.4) 0%, rgba(25,89,163,0.4) 100%)";
   cursor = "auto";
 
   constructor(public dragAndDropService: DragAndDropService) {}
