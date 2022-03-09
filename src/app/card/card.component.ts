@@ -1,16 +1,23 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from "@angular/core";
-import { DragAndDropOptions } from "../drag-and-drop-options";
-import { DragAndDropService } from "../drag-and-drop.service";
-import { DragAndDropComponent } from "../drag-and-drop/drag-and-drop.component";
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
+import { DragAndDropOptions } from '../drag-and-drop-options';
+import { DragAndDropService } from '../drag-and-drop.service';
+import { DragAndDropComponent } from '../drag-and-drop/drag-and-drop.component';
 
 @Component({
-  selector: "app-card",
-  templateUrl: "./card.component.html",
-  styleUrls: ["./card.component.css"]
+  selector: 'app-card',
+  templateUrl: './card.component.html',
+  styleUrls: ['./card.component.css'],
 })
 export class CardComponent implements OnInit, AfterViewInit {
   @ViewChild(DragAndDropComponent) dragAndDropComponent: DragAndDropComponent;
-  @ViewChild("innerDiv") innerDiv: ElementRef;
+  @ViewChild('innerDiv') innerDiv: ElementRef;
   @Input() name: string;
   dragAndDropOptions: DragAndDropOptions = new DragAndDropOptions();
   fromX = 0;

@@ -1,7 +1,13 @@
 <div class="parent" style="border: solid">
-  <div #innerDiv class="child" (pointerdown)="onpointerdown($event)" (pointermove)="onpointermove($event)"
-    (pointerup)="onpointerup($event)">
-    <span>{{name}}</span><br />
+  <div
+    #innerDiv
+    class="child"
+    (pointerdown)="onpointerdown($event)"
+    (pointermove)="onpointermove($event)"
+    (pointerup)="onpointerup($event)"
+  >
+    <span>{{ name }}</span
+    ><br />
 
     <input type="checkbox" [(ngModel)]="dragAndDropOptions.allowDrag" />
     <label>Allow Drag</label><br />
@@ -22,6 +28,11 @@
       style="width: 40px"
     /><br />
   </div>
-  <app-drag-and-drop [hidden]="getIsHidden()" class="child" [cardName]="name" [options]="dragAndDropOptions">
+  <app-drag-and-drop
+    [hidden]="getIsHidden()"
+    class="child"
+    [cardName]="name"
+    [options]="dragAndDropOptions"
+  >
   </app-drag-and-drop>
 </div>

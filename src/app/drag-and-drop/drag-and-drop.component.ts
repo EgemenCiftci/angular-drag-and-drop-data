@@ -4,31 +4,31 @@ import {
   Input,
   ViewChild,
   ElementRef,
-  AfterViewInit
-} from "@angular/core";
-import { DragAndDropOptions } from "../drag-and-drop-options";
-import { DragAndDropService } from "../drag-and-drop.service";
+  AfterViewInit,
+} from '@angular/core';
+import { DragAndDropOptions } from '../drag-and-drop-options';
+import { DragAndDropService } from '../drag-and-drop.service';
 
 @Component({
-  selector: "app-drag-and-drop",
-  templateUrl: "./drag-and-drop.component.html",
-  styleUrls: ["./drag-and-drop.component.css"]
+  selector: 'app-drag-and-drop',
+  templateUrl: './drag-and-drop.component.html',
+  styleUrls: ['./drag-and-drop.component.css'],
 })
 export class DragAndDropComponent implements OnInit, AfterViewInit {
-  @ViewChild("canvas") canvas: ElementRef;
+  @ViewChild('canvas') canvas: ElementRef;
   ctx: CanvasRenderingContext2D;
   @Input() width: number;
   @Input() height: number;
   @Input() cardName: string;
   @Input() options: DragAndDropOptions;
-  cursor = "auto";
+  cursor = 'auto';
 
   constructor(public dragAndDropService: DragAndDropService) {}
 
   ngOnInit() {}
 
   ngAfterViewInit() {
-    this.ctx = this.canvas.nativeElement.getContext("2d");
+    this.ctx = this.canvas.nativeElement.getContext('2d');
     this.dragAndDropService.onReset.subscribe(() => this.clearCanvas());
   }
 
@@ -73,12 +73,12 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
         if (isPointerOverAnotherComponent) {
           // Other drag and drop component found under pointer
           // Reset this component and release pointer
-          this.cursor = "auto";
+          this.cursor = 'auto';
           this.canvas.nativeElement.releasePointerCapture(e.pointerId);
           //console.log("releasePointerCapture: " + this.cardName);
           this.dragAndDropService.isDragging = false;
         } else {
-          this.cursor = "no-drop";
+          this.cursor = 'no-drop';
         }
       }
       this.setCursor(isPointerInBounds);
@@ -87,7 +87,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
 
   setCursor(isPointerInBounds: boolean) {
     if (isPointerInBounds) {
-      this.cursor = this.options.allowDrop ? "crosshair" : "no-drop";
+      this.cursor = this.options.allowDrop ? 'crosshair' : 'no-drop';
     }
   }
 
@@ -98,7 +98,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
     ) {
       const tos = this.getTos(e);
       if (tos) {
-        const toCard = tos.element.attributes["ng-reflect-card-name"].value;
+        const toCard = tos.element.attributes['ng-reflect-card-name'].value;
         if (this.options.allowDrop) {
           this.dragAndDropService.toCard = this.cardName;
           this.dragAndDropService.toX = e.offsetX;
@@ -126,12 +126,12 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
     this.dragAndDropService.isDragging = false;
     this.dragAndDropService.isInFineAdjustMode = true;
     this.canvas.nativeElement.releasePointerCapture(e.pointerId);
-    this.cursor = "auto";
+    this.cursor = 'auto';
   }
 
   getTos(e: any): { element: Element; x: number; y: number } {
     const elements = document.elementsFromPoint(e.clientX, e.clientY);
-    const to = elements.find(f => f.localName === "app-drag-and-drop");
+    const to = elements.find((f) => f.localName === 'app-drag-and-drop');
     if (to) {
       const rect = to.getBoundingClientRect();
       const x = e.clientX - rect.x;
@@ -148,7 +148,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
     const simplifiedX = Math.floor(x) + blurFix;
     const simplifiedY = Math.floor(y) + blurFix;
     this.ctx.lineWidth = lineWidth;
-    this.ctx.strokeStyle = "red";
+    this.ctx.strokeStyle = 'red';
     this.ctx.globalAlpha = 1;
     this.ctx.beginPath();
     this.ctx.moveTo(0, simplifiedY);
@@ -158,7 +158,7 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
     this.ctx.moveTo(simplifiedX, simplifiedY);
     this.ctx.ellipse(simplifiedX, simplifiedY, 6, 6, 0, 0, 2 * Math.PI);
     this.ctx.stroke();
-    this.ctx.fillStyle = "white";
+    this.ctx.fillStyle = 'white';
     this.ctx.fill();
   }
 
@@ -167,29 +167,29 @@ export class DragAndDropComponent implements OnInit, AfterViewInit {
     const x = this.ctx.canvas.width - (w + 10);
     const y = 10;
     const h = 110;
-    this.ctx.fillStyle = "rgb(112, 87, 56)";
+    this.ctx.fillStyle = 'rgb(112, 87, 56)';
     this.ctx.globalAlpha = 1;
     this.roundedRect(x, y, w, h, 6, 6);
     this.ctx.fill();
 
     this.ctx.beginPath();
-    this.ctx.fillStyle = "white";
-    this.ctx.strokeStyle = "white";
-    this.ctx.textAlign = "start";
-    this.ctx.textBaseline = "top";
-    this.ctx.fillText("FromCard:", x + 10, y + 10, 80);
-    this.ctx.fillText("FromX:", x + 10, y + 25, 80);
-    this.ctx.fillText("FromY:", x + 10, y + 40, 80);
+    this.ctx.fillStyle = 'white';
+    this.ctx.strokeStyle = 'white';
+    this.ctx.textAlign = 'start';
+    this.ctx.textBaseline = 'top';
+    this.ctx.fillText('FromCard:', x + 10, y + 10, 80);
+    this.ctx.fillText('FromX:', x + 10, y + 25, 80);
+    this.ctx.fillText('FromY:', x + 10, y + 40, 80);
 
     this.ctx.moveTo(x + 10, y + 54.5);
     this.ctx.lineTo(x + w - 10, y + 54.5);
     this.ctx.stroke();
 
-    this.ctx.fillText("ToCard:", x + 10, y + 60, 80);
-    this.ctx.fillText("ToX:", x + 10, y + 75, 80);
-    this.ctx.fillText("ToY:", x + 10, y + 90, 80);
+    this.ctx.fillText('ToCard:', x + 10, y + 60, 80);
+    this.ctx.fillText('ToX:', x + 10, y + 75, 80);
+    this.ctx.fillText('ToY:', x + 10, y + 90, 80);
 
-    this.ctx.textAlign = "end";
+    this.ctx.textAlign = 'end';
     this.ctx.fillText(this.dragAndDropService.fromCard, x + w - 10, y + 10, 80);
     this.ctx.fillText(
       Math.floor(this.dragAndDropService.fromX).toString(),
