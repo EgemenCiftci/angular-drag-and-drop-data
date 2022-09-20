@@ -1,9 +1,9 @@
 export class DragAndDropOptions {
   constructor(
     public showInfo = true,
-    public showCrosshair = false,
-    public allowDrag = false,
-    public allowDrop = false,
+    public showCrosshair = true,
+    public allowDrag = true,
+    public allowDrop = true,
     public dragStartThreshold = 32
   ) {}
 }
